@@ -1,4 +1,45 @@
 #!/usr/bin/make -f
 
+export DH_OPTIONS
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+INSTDIR = debian/tmp
+PY3VERS = $(shell py3versions -dv)
+
+ifeq (,$(filter $(DEB_HOST_ARCH),armel armhf))
+	SETGL = ON
+else
+	SETGL = OFF
+endif
+
 %:
-	dh $@
+	dh $@ --buildsystem=cmake \
+		  --builddirectory=build \
+		  --with python3
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		-DROBINMAP_INCLUDE_DIR="/usr/include/" \
+		-DCMAKE_CXX_STANDARD=17 \
+		-DCMAKE_SKIP_RPATH=ON \
+		-DINSTALL_FONTS=OFF \
+		-DJPEG_INCLUDE_DIR="/usr/include/$(DEB_HOST_MULTIARCH)" \
+		-DOIIO_DOWNLOAD_MISSING_TESTDATA=OFF \
+		-DPYTHON_VERSION=$(PY3VERS) \
+		-DSTOP_ON_WARNING=OFF \
+		-DUSE_FIELD3D=OFF \
+		-DUSE_OPENGL=$(SETGL)
+
+override_dh_auto_install:
+	dh_auto_install \
+		--buildsystem=cmake \
+		--destdir=$(INSTDIR)
+
+override_dh_auto_test:
+
+override_dh_install:
+	rm -f $(INSTDIR)/usr/share/doc/OpenImageIO/CHANGES*.md
+	rm -f $(INSTDIR)/usr/share/doc/OpenImageIO/LICENSE*.md
+	rm -f $(INSTDIR)/usr/share/doc/OpenImageIO/THIRD-PARTY.md
+	rm -f $(INSTDIR)/usr/lib/$(DEB_HOST_MULTIARCH)/python3*/site-packages/OpenImageIO/*.py
+	dh_install

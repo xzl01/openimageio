@@ -1,0 +1,10 @@
+openimageio (2.4.14.0+dfsg-1) unstable; urgency=medium
+
+  New code entering the OpenImageIO repository from July 1 2023
+  onward is subject to the Apache 2.0 license (see LICENSE.md).
+
+  Code dating from earlier than July 1 2023 was contributed under
+  the BSD3-clause license (see LICENSE-BSD.md).
+  Relicensing for this latter code happens in RELICENSING.md in case.
+
+ -- Matteo F. Vescovi <mfv@debian.org>  Sat, 12 Aug 2023 14:31:12 +0200

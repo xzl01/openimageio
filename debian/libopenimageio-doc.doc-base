@@ -1,0 +1,7 @@
+Document: openimageio
+Title: Debian OpenImageIO Manual
+Section: Programming/C++
+
+Format: Text
+Index: /usr/share/doc/libopenimageio-doc/index.rst
+Files: /usr/share/doc/libopenimageio-doc/*.rst
